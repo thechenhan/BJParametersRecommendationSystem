@@ -8,4 +8,4 @@ Do you know 3D printer？ Have you ever used it? You may know that there are a l
 I have done a lot of experiments on this 3D printer, and I conclude 4 key parameters. And 
 
 
-![](https://github.com/github/thechenhan/BJParametersRecommendationSystem/master/images/picture-of-software.png)
+![](https://raw.githubusercontent.com/thechenhan/BJParametersRecommendationSystem/master/picture-of-software.png)
