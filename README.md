@@ -1,4 +1,4 @@
-# BJParametersRecommendationSystem
+﻿# BJParametersRecommendationSystem
 This is a matlab app built based on BP-NN learning algorithm. It can recommend the optimal build parameters for binder jetting (a kind of 3D printer) machine.
 
 ##Introduction
@@ -6,3 +6,6 @@ Do you know 3D printer？ Have you ever used it? You may know that there are a l
 
 ##How it works?
 I have done a lot of experiments on this 3D printer, and I conclude 4 key parameters. And 
+
+
+![](https://github.com/github/thechenhan/BJParametersRecommendationSystem/master/images/picture-of-software.png)
