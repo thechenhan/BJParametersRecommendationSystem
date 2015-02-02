@@ -6,6 +6,6 @@ Do you know 3D printer？ Have you ever used it? You may know that there are a l
 
 ##How it works?
 I have done a lot of experiments on this 3D printer, and I conclude 4 key parameters. And 
-
+It doesn't work
 
 ![](https://raw.githubusercontent.com/thechenhan/BJParametersRecommendationSystem/master/picture-of-software.png)
