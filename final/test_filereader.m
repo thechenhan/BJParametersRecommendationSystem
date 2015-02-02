@@ -22,7 +22,7 @@ function varargout = test_filereader(varargin)
 
 % Edit the above text to modify the response to help test_filereader
 
-% Last Modified by GUIDE v2.5 23-Jan-2015 15:14:52
+% Last Modified by GUIDE v2.5 27-Jan-2015 20:41:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -109,6 +109,8 @@ function readfile_Callback(hObject, eventdata, handles)
 % hObject    handle to readfile (see GCBO)
 % eventdata  reserved - to be defined in drying future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
 [filename, pathname] = uigetfile({'*.STL;*.stl','all CAD Files';...
           '*.*','All Files' });
 if isequal(filename,0) || isequal(pathname,0)
@@ -837,17 +839,17 @@ end
 
 
 function edit17_Callback(hObject, eventdata, handles)
-% hObject    handle to edit17 (see GCBO)
+% hObject    handle to Layer_Thickness (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit17 as text
-%        str2double(get(hObject,'String')) returns contents of edit17 as a double
+% Hints: get(hObject,'String') returns contents of Layer_Thickness as text
+%        str2double(get(hObject,'String')) returns contents of Layer_Thickness as a double
 
 
 % --- Executes during object creation, after setting all properties.
 function edit17_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit17 (see GCBO)
+% hObject    handle to Layer_Thickness (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -859,18 +861,23 @@ end
 
 
 % --- Executes on slider movement.
-function slider2_Callback(hObject, eventdata, handles)
-% hObject    handle to slider2 (see GCBO)
+function sliderSurfaceRoughness_Callback(hObject, eventdata, handles)
+% hObject    handle to sliderSurfaceRoughness (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+pp = get(handles.sliderSurfaceRoughness, 'value');
+set(handles.text54, 'string', pp);
+
+
+
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
 
 % --- Executes during object creation, after setting all properties.
-function slider2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider2 (see GCBO)
+function sliderSurfaceRoughness_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to sliderSurfaceRoughness (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -882,17 +889,17 @@ end
 
 
 function edit18_Callback(hObject, eventdata, handles)
-% hObject    handle to edit18 (see GCBO)
+% hObject    handle to Printing_Saturation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit18 as text
-%        str2double(get(hObject,'String')) returns contents of edit18 as a double
+% Hints: get(hObject,'String') returns contents of Printing_Saturation as text
+%        str2double(get(hObject,'String')) returns contents of Printing_Saturation as a double
 
 
 % --- Executes during object creation, after setting all properties.
 function edit18_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit18 (see GCBO)
+% hObject    handle to Printing_Saturation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -904,18 +911,18 @@ end
 
 
 
-function edit19_Callback(hObject, eventdata, handles)
-% hObject    handle to edit19 (see GCBO)
+function Heater_Power_Ratio_Callback(hObject, eventdata, handles)
+% hObject    handle to Heater_Power_Ratio (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit19 as text
-%        str2double(get(hObject,'String')) returns contents of edit19 as a double
+% Hints: get(hObject,'String') returns contents of Heater_Power_Ratio as text
+%        str2double(get(hObject,'String')) returns contents of Heater_Power_Ratio as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit19_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit19 (see GCBO)
+function Heater_Power_Ratio_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Heater_Power_Ratio (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -928,17 +935,17 @@ end
 
 
 function edit20_Callback(hObject, eventdata, handles)
-% hObject    handle to edit20 (see GCBO)
+% hObject    handle to Drying_Time (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit20 as text
-%        str2double(get(hObject,'String')) returns contents of edit20 as a double
+% Hints: get(hObject,'String') returns contents of Drying_Time as text
+%        str2double(get(hObject,'String')) returns contents of Drying_Time as a double
 
 
 % --- Executes during object creation, after setting all properties.
 function edit20_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit20 (see GCBO)
+% hObject    handle to Drying_Time (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -950,18 +957,20 @@ end
 
 
 % --- Executes on slider movement.
-function slider3_Callback(hObject, eventdata, handles)
-% hObject    handle to slider3 (see GCBO)
+function sliderDimensionalY_Callback(hObject, eventdata, handles)
+% hObject    handle to sliderDimensionalY (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+pp = get(handles.sliderDimensionalY, 'value');
+set(handles.text55, 'string', pp);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
 
 % --- Executes during object creation, after setting all properties.
-function slider3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider3 (see GCBO)
+function sliderDimensionalY_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to sliderDimensionalY (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -972,18 +981,20 @@ end
 
 
 % --- Executes on slider movement.
-function slider4_Callback(hObject, eventdata, handles)
-% hObject    handle to slider4 (see GCBO)
+function SliderDimensionalZ_Callback(hObject, eventdata, handles)
+% hObject    handle to SliderDimensionalZ (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+pp = get(handles.SliderDimensionalZ, 'value');
+set(handles.text56, 'string', pp);
 
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
 
 % --- Executes during object creation, after setting all properties.
-function slider4_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider4 (see GCBO)
+function SliderDimensionalZ_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SliderDimensionalZ (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -998,6 +1009,72 @@ function pushbutton7_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton7 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+load('predictRaValue.mat');
+load('predictShrinkageYValue.mat')
+load('predictShrinkageZValue.mat')
+load('parameterDatabase.mat');
+
+pp1 = get(handles.sliderSurfaceRoughness, 'value');
+pp1 = 1 - pp1 / 100;
+pp2 = get(handles.sliderDimensionalY, 'value');
+pp2 = 1 - pp2 / 100;
+pp3 = get(handles.SliderDimensionalZ, 'value');
+pp3 = 1 - pp3 / 100;
+
+A = zeros(1,16000);
+for i = 1:16000
+   if (predictRa(1,i) <= (pp1 * (max(predictRa) - min(predictRa)) + min(predictRa)))
+     A(i) = A(i) + 1;
+   end
+end
+
+for i = 1:16000
+   if (PredictValueShrinkageY(1,i) <= (pp2 * (max(PredictValueShrinkageY) - min(PredictValueShrinkageY)) + min(PredictValueShrinkageY)))
+     A(i) = A(i) + 1;
+   end
+end
+
+for i = 1:16000
+   if (PredictShrinkageZValue(1,i) <= (pp3 * (max(PredictShrinkageZValue) - min(PredictShrinkageZValue)) + min(PredictShrinkageZValue)))
+     A(i) = A(i) + 1;
+   end
+end
+fileName = get(handles.file_path,'String');
+[vertices, tessellation] = readStl(fileName);
+[triBottomList, triTopList] = buildTopBotLists(vertices, tessellation);
+zLimits = [min(vertices(:,3)) max(vertices(:,3))];
+heightZ = (zLimits(2) - zLimits(1)) * 1000;
+
+minTimePosition = 0;
+minTimeValue = 100000000;
+
+for i = 1:16000
+   if (A(i) == 3)
+      %calculation the printing time
+      LayerNum = heightZ / parameterDatabase(1,i);
+      timeSub1 = (400 * 2 + 30 * 7 * 2) / 70 + 4;
+      timeSub2 = 27.33 + (2 * 120 - 50) / 5;
+      timeSub3 = parameterDatabase(4,i);
+      timeSub4 = 60 / 11;
+      timeToal = LayerNum * (timeSub1 + timeSub2 + timeSub3 + timeSub4);
+      if timeToal <= minTimeValue
+         minTimePosition = i;
+         minTimeValue = timeToal;
+      end
+   end
+end
+if minTimePosition == 0
+    errordlg('No Solution, Please Modify Your Quality Requirement','Error!');
+else
+    set(handles.Layer_Thickness, 'string',  parameterDatabase(1, minTimePosition));
+    set(handles.Printing_Saturation, 'string',  parameterDatabase(2, minTimePosition));
+    set(handles.Heater_Power_Ratio, 'string',  parameterDatabase(3, minTimePosition));
+    set(handles.Drying_Time, 'string',  parameterDatabase(4, minTimePosition));
+    set(handles.Surface_Roughness, 'string',  predictRa(1, minTimePosition));
+    set(handles.Shrinkage_Y, 'string',  PredictValueShrinkageY(1, minTimePosition)*100);
+    set(handles.Shrinkage_Z, 'string',  PredictShrinkageZValue(1, minTimePosition)*100);
+    set(handles.Optimal_Printing_Time, 'string', minTimeValue);
+end
 
 
 % --- Executes on button press in pushbutton8.
@@ -1005,11 +1082,30 @@ function pushbutton8_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton8 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+set(handles.sliderSurfaceRoughness, 'value', 0);
+set(handles.sliderDimensionalY, 'value', 0);
+set(handles.SliderDimensionalZ, 'value', 0);
+set(handles.Layer_Thickness, 'string', 0);
+set(handles.Heater_Power_Ratio, 'string', 0);
+set(handles.Printing_Saturation, 'string', 0);
+set(handles.Drying_Time, 'string', 0);
+set(handles.Surface_Roughness, 'string', 0);
+set(handles.Shrinkage_Y, 'string', 0);
+set(handles.Shrinkage_Z, 'string', 0);
+set(handles.Optimal_Printing_Time, 'string', 0);
+set(handles.text54, 'string', 0);
+set(handles.text55, 'string', 0);
+set(handles.text56, 'string', 0);
 
 
-% --- Executes on key press with focus on slider2 and none of its controls.
-function slider2_KeyPressFcn(hObject, eventdata, handles)
-% hObject    handle to slider2 (see GCBO)
+
+
+
+
+
+% --- Executes on key press with focus on sliderSurfaceRoughness and none of its controls.
+function sliderSurfaceRoughness_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to sliderSurfaceRoughness (see GCBO)
 % eventdata  structure with the following fields (see UICONTROL)
 %	Key: name of the key that was pressed, in lower case
 %	Character: character interpretation of the key(s) that was pressed
@@ -1018,18 +1114,18 @@ function slider2_KeyPressFcn(hObject, eventdata, handles)
 
 
 
-function edit23_Callback(hObject, eventdata, handles)
-% hObject    handle to edit23 (see GCBO)
+function Surface_Roughness_Callback(hObject, eventdata, handles)
+% hObject    handle to Surface_Roughness (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit23 as text
-%        str2double(get(hObject,'String')) returns contents of edit23 as a double
+% Hints: get(hObject,'String') returns contents of Surface_Roughness as text
+%        str2double(get(hObject,'String')) returns contents of Surface_Roughness as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit23_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit23 (see GCBO)
+function Surface_Roughness_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Surface_Roughness (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1041,18 +1137,18 @@ end
 
 
 
-function edit25_Callback(hObject, eventdata, handles)
-% hObject    handle to edit25 (see GCBO)
+function Shrinkage_Z_Callback(hObject, eventdata, handles)
+% hObject    handle to Shrinkage_Z (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit25 as text
-%        str2double(get(hObject,'String')) returns contents of edit25 as a double
+% Hints: get(hObject,'String') returns contents of Shrinkage_Z as text
+%        str2double(get(hObject,'String')) returns contents of Shrinkage_Z as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit25_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit25 (see GCBO)
+function Shrinkage_Z_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Shrinkage_Z (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1064,18 +1160,18 @@ end
 
 
 
-function edit26_Callback(hObject, eventdata, handles)
-% hObject    handle to edit26 (see GCBO)
+function Shrinkage_Y_Callback(hObject, eventdata, handles)
+% hObject    handle to Shrinkage_Y (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit26 as text
-%        str2double(get(hObject,'String')) returns contents of edit26 as a double
+% Hints: get(hObject,'String') returns contents of Shrinkage_Y as text
+%        str2double(get(hObject,'String')) returns contents of Shrinkage_Y as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit26_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit26 (see GCBO)
+function Shrinkage_Y_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Shrinkage_Y (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1087,18 +1183,18 @@ end
 
 
 
-function edit27_Callback(hObject, eventdata, handles)
-% hObject    handle to edit27 (see GCBO)
+function Optimal_Printing_Time_Callback(hObject, eventdata, handles)
+% hObject    handle to Optimal_Printing_Time (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit27 as text
-%        str2double(get(hObject,'String')) returns contents of edit27 as a double
+% Hints: get(hObject,'String') returns contents of Optimal_Printing_Time as text
+%        str2double(get(hObject,'String')) returns contents of Optimal_Printing_Time as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit27_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit27 (see GCBO)
+function Optimal_Printing_Time_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to Optimal_Printing_Time (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

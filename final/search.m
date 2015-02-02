@@ -1,3 +1,8 @@
+load('predictRaValue.mat');
+load('predictShrinkageYValue.mat')
+load('predictShrinkageZValue.mat')
+load('parameterDatabase.mat');
+
 A = zeros(1,16000);
 for i = 1:16000
    if (predictRa(1,i) <= (0.3 * max(predictRa) + min(predictRa)))
