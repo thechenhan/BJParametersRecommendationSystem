@@ -22,7 +22,7 @@ function varargout = test_filereader(varargin)
 
 % Edit the above text to modify the response to help test_filereader
 
-% Last Modified by GUIDE v2.5 03-Feb-2015 18:19:45
+% Last Modified by GUIDE v2.5 04-Feb-2015 12:40:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -51,10 +51,13 @@ function test_filereader_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in drying future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to test_filereader (see VARARGIN)
+
+handles.DefaultSpreadSpeed = importdata('DefaultSpreadSpeed.mat'); %import the Default Spread Speed data from file
 h = handles.figure1;
-newIcon = javax.swing.ImageIcon('ICON_LOGO.jpg')
+newIcon = javax.swing.ImageIcon('ICON_LOGO.jpg');
 figFrame = get(h,'JavaFrame'); %取得Figure的JavaFrame。
 figFrame.setFigureIcon(newIcon); %修改图标
+
 % Choose default command line output for test_filereader
 handles.output = hObject;
 
@@ -1241,18 +1244,18 @@ function uitable5_CellEditCallback(hObject, eventdata, handles)
 
 
 
-function edit30_Callback(hObject, eventdata, handles)
-% hObject    handle to edit30 (see GCBO)
+function InitialSpreadSpeedEditor_Callback(hObject, eventdata, handles)
+% hObject    handle to InitialSpreadSpeedEditor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit30 as text
-%        str2double(get(hObject,'String')) returns contents of edit30 as a double
+% Hints: get(hObject,'String') returns contents of InitialSpreadSpeedEditor as text
+%        str2double(get(hObject,'String')) returns contents of InitialSpreadSpeedEditor as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit30_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit30 (see GCBO)
+function InitialSpreadSpeedEditor_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to InitialSpreadSpeedEditor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1264,18 +1267,18 @@ end
 
 
 
-function edit29_Callback(hObject, eventdata, handles)
-% hObject    handle to edit29 (see GCBO)
+function InitialDryingTimeEditor_Callback(hObject, eventdata, handles)
+% hObject    handle to InitialDryingTimeEditor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit29 as text
-%        str2double(get(hObject,'String')) returns contents of edit29 as a double
+% Hints: get(hObject,'String') returns contents of InitialDryingTimeEditor as text
+%        str2double(get(hObject,'String')) returns contents of InitialDryingTimeEditor as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit29_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit29 (see GCBO)
+function InitialDryingTimeEditor_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to InitialDryingTimeEditor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1287,18 +1290,18 @@ end
 
 
 
-function edit31_Callback(hObject, eventdata, handles)
-% hObject    handle to edit31 (see GCBO)
+function CuringTemperatureEditor_Callback(hObject, eventdata, handles)
+% hObject    handle to CuringTemperatureEditor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit31 as text
-%        str2double(get(hObject,'String')) returns contents of edit31 as a double
+% Hints: get(hObject,'String') returns contents of CuringTemperatureEditor as text
+%        str2double(get(hObject,'String')) returns contents of CuringTemperatureEditor as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit31_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit31 (see GCBO)
+function CuringTemperatureEditor_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to CuringTemperatureEditor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1310,18 +1313,18 @@ end
 
 
 
-function edit32_Callback(hObject, eventdata, handles)
-% hObject    handle to edit32 (see GCBO)
+function CuringHoldTimeEditor_Callback(hObject, eventdata, handles)
+% hObject    handle to CuringHoldTimeEditor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit32 as text
-%        str2double(get(hObject,'String')) returns contents of edit32 as a double
+% Hints: get(hObject,'String') returns contents of CuringHoldTimeEditor as text
+%        str2double(get(hObject,'String')) returns contents of CuringHoldTimeEditor as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit32_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit32 (see GCBO)
+function CuringHoldTimeEditor_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to CuringHoldTimeEditor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1332,19 +1335,19 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on selection change in popupmenu3.
-function popupmenu3_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu3 (see GCBO)
+% --- Executes on selection change in SinteringProfileSelection.
+function SinteringProfileSelection_Callback(hObject, eventdata, handles)
+% hObject    handle to SinteringProfileSelection (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu3 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu3
+% Hints: contents = cellstr(get(hObject,'String')) returns SinteringProfileSelection contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from SinteringProfileSelection
 
 
 % --- Executes during object creation, after setting all properties.
-function popupmenu3_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu3 (see GCBO)
+function SinteringProfileSelection_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SinteringProfileSelection (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1355,15 +1358,160 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in pushbutton9.
-function pushbutton9_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton9 (see GCBO)
+% --- Executes on button press in CalculateTimeButton.
+function CalculateTimeButton_Callback(hObject, eventdata, handles)
+% hObject    handle to CalculateTimeButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in pushbutton10.
-function pushbutton10_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton10 (see GCBO)
+% --- Executes on button press in ResetProfileButton.
+function ResetProfileButton_Callback(hObject, eventdata, handles)
+% hObject    handle to ResetProfileButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function PrintingTimeEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to PrintingTimeEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PrintingTimeEstimation as text
+%        str2double(get(hObject,'String')) returns contents of PrintingTimeEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function PrintingTimeEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PrintingTimeEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function CuringTimeEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to CuringTimeEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of CuringTimeEstimation as text
+%        str2double(get(hObject,'String')) returns contents of CuringTimeEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function CuringTimeEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to CuringTimeEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function SinteringTimeEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to SinteringTimeEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of SinteringTimeEstimation as text
+%        str2double(get(hObject,'String')) returns contents of SinteringTimeEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function SinteringTimeEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SinteringTimeEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function ManualWorkTimeEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to ManualWorkTimeEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of ManualWorkTimeEstimation as text
+%        str2double(get(hObject,'String')) returns contents of ManualWorkTimeEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function ManualWorkTimeEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to ManualWorkTimeEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function TotalTimeEstimationSeconds_Callback(hObject, eventdata, handles)
+% hObject    handle to TotalTimeEstimationSeconds (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of TotalTimeEstimationSeconds as text
+%        str2double(get(hObject,'String')) returns contents of TotalTimeEstimationSeconds as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function TotalTimeEstimationSeconds_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to TotalTimeEstimationSeconds (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function TotalTimeEstimationHours_Callback(hObject, eventdata, handles)
+% hObject    handle to TotalTimeEstimationHours (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of TotalTimeEstimationHours as text
+%        str2double(get(hObject,'String')) returns contents of TotalTimeEstimationHours as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function TotalTimeEstimationHours_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to TotalTimeEstimationHours (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function SpreadSpeedTable_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to SpreadSpeedTable (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
