@@ -1395,12 +1395,12 @@ initialSpreadSpeed=str2double(get(handles.InitialSpreadSpeedEditor, 'string'));
 DryingSpreadingProfile=get(handles.SpreadSpeedTable, 'data');
 
 curingTemperature=str2double(get(handles.CuringTemperatureEditor, 'string'));
-curingHoldTime=str2double(get(handles.CuringHoldTimeEditor, 'string'))*3600; % transfer hours into seconds
+curingHoldTime=str2double(get(handles.CuringHoldEditor, 'string'))*3600; % transfer hours into seconds
 sinteringProfile=get(handles.SinteringProfileSelection, 'value');
-if (isempty(get(handles.Layer_Thickness, 'string')))
+if (get(handles.Layer_Thickness, 'string')=='')
     errordlg('Please set up the Layer thickness(input yourself or using the recommandation ','Invalid Input','modal');
 else 
-layerThickness=str2double(get(handles.Layer_Thickness,'string'));
+layerThickness=str2double(get(handles.Layer_thickness,'string'));
 end
 
 fileName = get(handles.file_path,'String');
@@ -1426,7 +1426,7 @@ if (sinteringProfile == 1) %S4-One Step
     sinteringTimeEstimation = 398 * 60;
 elseif (sinteringProfile == 2) %Bronze Infiltration
     sinteringTimeEstimation = 339 * 60;
-elseif (sinteringProfile == 3) %S4 Sintering
+elseif (sinteringProfile == 2) %S4 Sintering
     sinteringTimeEstimation = 394 * 60;
 end
 set(handles.SinteringTimeEstimation, 'string', sinteringTimeEstimation);
@@ -1493,8 +1493,8 @@ totalTime = totalPrintingTimeEstimation + manualWorkTime + sinteringTimeEstimati
 totalTimeHours = totalTime / 3600 ; 
 set(handles.TotalTimeEstimationSeconds, 'string', totalTime);
 set(handles.TotalTimeEstimationSeconds, 'value', totalTime);
-set(handles.TotalTimeEstimationHours, 'string', totalTimeHours);
-set(handles.TotalTimeEstimationHours, 'value', totalTimeHours);
+set(handles.TotalTimeEstimationHours, 'string', totalTime);
+set(handles.TotalTimeEstimationSecos, 'value', totalTime);
 
 
 
