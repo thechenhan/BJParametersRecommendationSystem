@@ -22,7 +22,7 @@ function varargout = test_filereader(varargin)
 
 % Edit the above text to modify the response to help test_filereader
 
-% Last Modified by GUIDE v2.5 22-Feb-2015 14:30:52
+% Last Modified by GUIDE v2.5 23-Feb-2015 20:19:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1356,7 +1356,7 @@ function SinteringProfileSelection_Callback(hObject, eventdata, handles)
 % hObject    handle to SinteringProfileSelection (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-sinteringProfile= str2double(get(hObject,'string'));
+sinteringProfile = str2double(get(hObject,'string'));
 guidata(hObject, handles);
 % Hints: contents = cellstr(get(hObject,'String')) returns SinteringProfileSelection contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from SinteringProfileSelection
@@ -1383,12 +1383,6 @@ function CalculateTimeButton_Callback(hObject, eventdata, handles)
 
 load('parameterDatabase.mat');
 
-pp1 = get(handles.sliderSurfaceRoughness, 'value');
-pp1 = 1 - pp1 / 100;
-pp2 = get(handles.sliderDimensionalY, 'value');
-pp2 = 1 - pp2 / 100;
-pp3 = get(handles.SliderDimensionalZ, 'value');
-pp3 = 1 - pp3 / 100;
 
 initialDryingTime=str2double(get(handles.InitialDryingTimeEditor, 'string'));
 initialSpreadSpeed=str2double(get(handles.InitialSpreadSpeedEditor, 'string'));
@@ -1510,7 +1504,7 @@ set(handles.CuringTemperatureEditor, 'value', 175);
 set(handles.CuringHoldTimeEditor, 'value', 5);
 set(handles.CuringTemperatureEditor, 'string', 175);
 set(handles.CuringHoldTimeEditor, 'string', 5);
-set(handles.SinteringProfileSelection, 'string','S4-One Step');
+%set(handles.SinteringProfileSelection, 'string','S4-One Step');
 set(handles.SinteringProfileSelection, 'value',1);
 set(handles.InitialDryingTimeEditor, 'value',30);
 set(handles.InitialDryingTimeEditor, 'string',30);
@@ -1685,7 +1679,7 @@ function SpreadSpeedTable_CellEditCallback(hObject, eventdata, handles)
 %	NewData: EditData or its converted form set on the Data property. Empty if Data was not changed
 %	Error: error string when failed to convert EditData to appropriate value for Data
 % handles    structure with handles and user data (see GUIDATA)
-defaultSpreadDryingProfil = get(hObject,'Data');
+defaultSpreadDryingProfil = get(hObject,'data');
 guidata(hObject, handles);
 
 
@@ -1695,7 +1689,7 @@ function SpreadSpeedTable_CellSelectionCallback(hObject, eventdata, handles)
 % eventdata  structure with the following fields (see UITABLE)
 %	Indices: row and column indices of the cell(s) currently selecteds
 % handles    structure with handles and user data (see GUIDATA)
-defaultSpreadDryingProfil = get(hObject,'Data');
+defaultSpreadDryingProfil = get(hObject,'data');
 % indices = eventdata.Indices;
 % r = indices(:,1);
 % c = indices(:,2);
@@ -1711,3 +1705,6 @@ function figure1_ResizeFcn(hObject, eventdata, handles)
 % hObject    handle to figure1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
