@@ -22,7 +22,7 @@ function varargout = test_filereader(varargin)
 
 % Edit the above text to modify the response to help test_filereader
 
-% Last Modified by GUIDE v2.5 23-Feb-2015 20:19:11
+% Last Modified by GUIDE v2.5 24-Feb-2015 17:51:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1480,15 +1480,91 @@ set(handles.PrintingTimeEstimation, 'string', totalPrintingTimeEstimation);
 set(handles.PrintingTimeEstimation, 'value', totalPrintingTimeEstimation);
 
 % manual working time from the experiments
-manualWorkTime = 36 * 60 ;
-set(handles.ManualWorkTimeEstimation, 'string', manualWorkTime);
+printingPreparationTime = 20 * 60;
+curingPreparationTime = 5 * 60;
+depowderTime = 10 * 60;
+sinteringPreparationTime = 5* 60;
+manualWorkTime = depowderTime + sinteringPreparationTime + curingPreparationTime + printingPreparationTime;
 
-totalTime = totalPrintingTimeEstimation + manualWorkTime + sinteringTimeEstimation + curingTimeEstimation;
+%KPI related Time parameter
+%%busy Time
+totalSinteringFurnaceBusyTime = sinteringTimeEstimation + sinteringPreparationTime;
+totalCuringOvenBusyTime = curingTimeEstimation + curingPreparationTime + depowderTime;
+totalPrinterBusyTime = totalPrintingTimeEstimation + printingPreparationTime; 
+totalBusyTime = totalPrinterBusyTime + totalCuringOvenBusyTime + totalSinteringFurnaceBusyTime;
+%%Operation Time
+sinteringOperationTime = sinteringTimeEstimation;
+curingOperationTime = curingTimeEstimation;
+printingOperationTime = timePrintheadPass + heatingTime + spreadTime + timePlatformMoving;
+mainUsageTime = sinteringOperationTime + curingOperationTime + printingOperationTime; 
+%%Availability
+availabilityPrint = (1 - totalPrinterBusyTime / totalBusyTime) * 100; 
+availabilityCuring = (1 -  totalCuringOvenBusyTime / totalBusyTime) * 100;
+availabilitySintering = (1 -  totalSinteringFurnaceBusyTime / totalBusyTime) * 100;
+availabilityTotal = 0; % since no machine breaking down is considered
+%%Efficiency
+efficiencyPrint = (printingOperationTime / totalPrinterBusyTime) * 100;
+efficiencyCuring = (curingOperationTime / totalCuringOvenBusyTime) * 100;
+efficiencySintering = (sinteringOperationTime / totalSinteringFurnaceBusyTime) * 100;
+efficiencyTotal = (mainUsageTime  / totalBusyTime) * 100;
+%%Preparation degree: only preparation is considered, initialization and
+%%depowdering is not considered as preparation
+preparationDegreePrint = (printingPreparationTime / totalPrinterBusyTime) * 100;
+preparationDegreeCuring = (curingPreparationTime / totalCuringOvenBusyTime) * 100;
+preparationDegreeSintering = (sinteringPreparationTime / totalSinteringFurnaceBusyTime) * 100;
+preparationDegreeTotal = ((printingPreparationTime + curingPreparationTime + sinteringPreparationTime) / totalBusyTime) * 100;
+
+% display the result on the interface
+set(handles.ManualWorkTimeEstimation, 'string', manualWorkTime);
+totalTime = totalBusyTime;
 totalTimeHours = totalTime / 3600 ; 
 set(handles.TotalTimeEstimationSeconds, 'string', totalTime);
 set(handles.TotalTimeEstimationSeconds, 'value', totalTime);
 set(handles.TotalTimeEstimationHours, 'string', totalTimeHours);
 set(handles.TotalTimeEstimationHours, 'value', totalTimeHours);
+set(handles.MainUsageTimeTotal, 'string', mainUsageTime);
+set(handles.MainUsageTimeTotal, 'value', mainUsageTime);
+set(handles.MainUsageTimePrint, 'string', printingOperationTime);
+set(handles.MainUsageTimePrint, 'value', printingOperationTime);
+set(handles.MainUsageTimeCuring, 'string', curingOperationTime);
+set(handles.MainUsageTimeCuring, 'value', curingOperationTime);
+set(handles.MainUsageTimeSintering, 'string', sinteringOperationTime);
+set(handles.MainUsageTimeSintering, 'value', sinteringOperationTime);
+set(handles.BusyTimeTotal, 'string', totalBusyTime);
+set(handles.BusyTimeTotal, 'value', totalBusyTime);
+set(handles.BusyTimePrint, 'string', totalPrinterBusyTime);
+set(handles.BusyTimePrint, 'value', totalPrinterBusyTime);
+set(handles.BusyTimeCuring, 'string', totalCuringOvenBusyTime);
+set(handles.BusyTimeCuring, 'value', totalCuringOvenBusyTime);
+set(handles.BusyTimeSintering, 'string', totalSinteringFurnaceBusyTime);
+set(handles.BusyTimeSintering, 'value', totalSinteringFurnaceBusyTime);
+set(handles.AvailabilityTotal, 'string', availabilityTotal);
+set(handles.AvailabilityTotal, 'value', availabilityTotal);
+set(handles.AvailabilityPrint, 'string', availabilityPrint);
+set(handles.AvailabilityPrint, 'value', availabilityPrint);
+set(handles.AvailabilityCuring, 'string', availabilityCuring);
+set(handles.AvailabilityCuring, 'value', availabilityCuring);
+set(handles.AvailabilitySintering, 'string', availabilitySintering);
+set(handles.AvailabilitySintering, 'value', availabilitySintering);
+set(handles.EfficiencyTotal, 'string', efficiencyTotal);
+set(handles.EfficiencyTotal, 'value', efficiencyTotal);
+set(handles.EfficiencyPrint, 'string', efficiencyPrint);
+set(handles.EfficiencyPrint, 'value', efficiencyPrint);
+set(handles.EfficiencyCuring, 'string', efficiencyCuring);
+set(handles.EfficiencyCuring, 'value', efficiencyCuring);
+set(handles.EfficiencySintering, 'string', efficiencySintering);
+set(handles.EfficiencySintering, 'value', efficiencySintering);
+set(handles.PreparationDegreeTotal, 'string', preparationDegreeTotal);
+set(handles.PreparationDegreeTotal, 'value', preparationDegreeTotal);
+set(handles.PreparationDegreePrint, 'string', preparationDegreePrint);
+set(handles.PreparationDegreePrint, 'value', preparationDegreePrint);
+set(handles.PreparationDegreeCuring, 'string', preparationDegreeCuring);
+set(handles.PreparationDegreeCuring, 'value', preparationDegreeCuring);
+set(handles.PreparationDegreeSintering, 'string', preparationDegreeSintering);
+set(handles.PreparationDegreeSintering, 'value', preparationDegreeSintering);
+
+
+
 
 
 
@@ -1523,6 +1599,46 @@ set(handles.TotalTimeEstimationSeconds, 'value',0);
 set(handles.TotalTimeEstimationSeconds, 'string','');
 set(handles.TotalTimeEstimationHours, 'value',0);
 set(handles.TotalTimeEstimationHours, 'string','');
+set(handles.MainUsageTimeTotal, 'string', '');
+set(handles.MainUsageTimeTotal, 'value', 0);
+set(handles.MainUsageTimePrint, 'string', '');
+set(handles.MainUsageTimePrint, 'value', 0);
+set(handles.MainUsageTimeCuring, 'string', '');
+set(handles.MainUsageTimeCuring, 'value', 0);
+set(handles.MainUsageTimeSintering, 'string', '');
+set(handles.MainUsageTimeSintering, 'value', 0);
+set(handles.BusyTimeTotal, 'string', '');
+set(handles.BusyTimeTotal, 'value', 0);
+set(handles.BusyTimePrint, 'string', '');
+set(handles.BusyTimePrint, 'value', 0);
+set(handles.BusyTimeCuring, 'string', '');
+set(handles.BusyTimeCuring, 'value', 0);
+set(handles.BusyTimeSintering, 'string', '');
+set(handles.BusyTimeSintering, 'value', 0);
+set(handles.AvailabilityTotal, 'string', '');
+set(handles.AvailabilityTotal, 'value', 0);
+set(handles.AvailabilityPrint, 'string','');
+set(handles.AvailabilityPrint, 'value', 0);
+set(handles.AvailabilityCuring, 'string','');
+set(handles.AvailabilityCuring, 'value',0);
+set(handles.AvailabilitySintering, 'string', '');
+set(handles.AvailabilitySintering, 'value', 0);
+set(handles.EfficiencyTotal, 'string', '');
+set(handles.EfficiencyTotal, 'value', 0);
+set(handles.EfficiencyPrint, 'string', '');
+set(handles.EfficiencyPrint, 'value', 0);
+set(handles.EfficiencyCuring, 'string', '');
+set(handles.EfficiencyCuring, 'value', 0);
+set(handles.EfficiencySintering, 'string', '');
+set(handles.EfficiencySintering, 'value', 0);
+set(handles.PreparationDegreeTotal, 'string', '');
+set(handles.PreparationDegreeTotal, 'value', 0);
+set(handles.PreparationDegreePrint, 'string', '');
+set(handles.PreparationDegreePrint, 'value', 0);
+set(handles.PreparationDegreeCuring, 'string', '');
+set(handles.PreparationDegreeCuring, 'value', 0);
+set(handles.PreparationDegreeSintering, 'string', '');
+set(handles.PreparationDegreeSintering, 'value', 0);
 
 
 function PrintingTimeEstimation_Callback(hObject, eventdata, handles)
@@ -1708,3 +1824,585 @@ function figure1_ResizeFcn(hObject, eventdata, handles)
 
 
 
+
+
+
+function BinderConsumptionEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to BinderConsumptionEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BinderConsumptionEstimation as text
+%        str2double(get(hObject,'String')) returns contents of BinderConsumptionEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BinderConsumptionEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BinderConsumptionEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function CleanerConsumptionEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to CleanerConsumptionEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of CleanerConsumptionEstimation as text
+%        str2double(get(hObject,'String')) returns contents of CleanerConsumptionEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function CleanerConsumptionEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to CleanerConsumptionEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit41_Callback(hObject, eventdata, handles)
+% hObject    handle to edit41 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit41 as text
+%        str2double(get(hObject,'String')) returns contents of edit41 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit41_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit41 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function AvailabilityPrint_Callback(hObject, eventdata, handles)
+% hObject    handle to AvailabilityPrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of AvailabilityPrint as text
+%        str2double(get(hObject,'String')) returns contents of AvailabilityPrint as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function AvailabilityPrint_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to AvailabilityPrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function PreparationDegreePrint_Callback(hObject, eventdata, handles)
+% hObject    handle to PreparationDegreePrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PreparationDegreePrint as text
+%        str2double(get(hObject,'String')) returns contents of PreparationDegreePrint as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function PreparationDegreePrint_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PreparationDegreePrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function EfficiencyPrint_Callback(hObject, eventdata, handles)
+% hObject    handle to EfficiencyPrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EfficiencyPrint as text
+%        str2double(get(hObject,'String')) returns contents of EfficiencyPrint as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EfficiencyPrint_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EfficiencyPrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function MainUsageTimePrint_Callback(hObject, eventdata, handles)
+% hObject    handle to MainUsageTimePrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of MainUsageTimePrint as text
+%        str2double(get(hObject,'String')) returns contents of MainUsageTimePrint as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function MainUsageTimePrint_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to MainUsageTimePrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function BusyTimePrint_Callback(hObject, eventdata, handles)
+% hObject    handle to BusyTimePrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BusyTimePrint as text
+%        str2double(get(hObject,'String')) returns contents of BusyTimePrint as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BusyTimePrint_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BusyTimePrint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function MaterialEfficiencyEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to MaterialEfficiencyEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of MaterialEfficiencyEstimation as text
+%        str2double(get(hObject,'String')) returns contents of MaterialEfficiencyEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function MaterialEfficiencyEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to MaterialEfficiencyEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function wasteGenerationEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to wasteGenerationEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of wasteGenerationEstimation as text
+%        str2double(get(hObject,'String')) returns contents of wasteGenerationEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function wasteGenerationEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to wasteGenerationEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function MainUsageTimeCuring_Callback(hObject, eventdata, handles)
+% hObject    handle to MainUsageTimeCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of MainUsageTimeCuring as text
+%        str2double(get(hObject,'String')) returns contents of MainUsageTimeCuring as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function MainUsageTimeCuring_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to MainUsageTimeCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function MainUsageTimeSintering_Callback(hObject, eventdata, handles)
+% hObject    handle to MainUsageTimeSintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of MainUsageTimeSintering as text
+%        str2double(get(hObject,'String')) returns contents of MainUsageTimeSintering as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function MainUsageTimeSintering_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to MainUsageTimeSintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function MainUsageTimeTotal_Callback(hObject, eventdata, handles)
+% hObject    handle to MainUsageTimeTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of MainUsageTimeTotal as text
+%        str2double(get(hObject,'String')) returns contents of MainUsageTimeTotal as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function MainUsageTimeTotal_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to MainUsageTimeTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function BusyTimeCuring_Callback(hObject, eventdata, handles)
+% hObject    handle to BusyTimeCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BusyTimeCuring as text
+%        str2double(get(hObject,'String')) returns contents of BusyTimeCuring as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BusyTimeCuring_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BusyTimeCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function BusyTimeSintering_Callback(hObject, eventdata, handles)
+% hObject    handle to BusyTimeSintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BusyTimeSintering as text
+%        str2double(get(hObject,'String')) returns contents of BusyTimeSintering as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BusyTimeSintering_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BusyTimeSintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function BusyTimeTotal_Callback(hObject, eventdata, handles)
+% hObject    handle to BusyTimeTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BusyTimeTotal as text
+%        str2double(get(hObject,'String')) returns contents of BusyTimeTotal as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BusyTimeTotal_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BusyTimeTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function AvailabilityCuring_Callback(hObject, eventdata, handles)
+% hObject    handle to AvailabilityCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of AvailabilityCuring as text
+%        str2double(get(hObject,'String')) returns contents of AvailabilityCuring as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function AvailabilityCuring_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to AvailabilityCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function AvailabilitySintering_Callback(hObject, eventdata, handles)
+% hObject    handle to AvailabilitySintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of AvailabilitySintering as text
+%        str2double(get(hObject,'String')) returns contents of AvailabilitySintering as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function AvailabilitySintering_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to AvailabilitySintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function AvailabilityTotal_Callback(hObject, eventdata, handles)
+% hObject    handle to AvailabilityTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of AvailabilityTotal as text
+%        str2double(get(hObject,'String')) returns contents of AvailabilityTotal as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function AvailabilityTotal_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to AvailabilityTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function EfficiencyCuring_Callback(hObject, eventdata, handles)
+% hObject    handle to EfficiencyCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EfficiencyCuring as text
+%        str2double(get(hObject,'String')) returns contents of EfficiencyCuring as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EfficiencyCuring_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EfficiencyCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function EfficiencySintering_Callback(hObject, eventdata, handles)
+% hObject    handle to EfficiencySintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EfficiencySintering as text
+%        str2double(get(hObject,'String')) returns contents of EfficiencySintering as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EfficiencySintering_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EfficiencySintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function EfficiencyTotal_Callback(hObject, eventdata, handles)
+% hObject    handle to EfficiencyTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of EfficiencyTotal as text
+%        str2double(get(hObject,'String')) returns contents of EfficiencyTotal as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function EfficiencyTotal_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to EfficiencyTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function PreparationDegreeCuring_Callback(hObject, eventdata, handles)
+% hObject    handle to PreparationDegreeCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PreparationDegreeCuring as text
+%        str2double(get(hObject,'String')) returns contents of PreparationDegreeCuring as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function PreparationDegreeCuring_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PreparationDegreeCuring (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function PreparationDegreeSintering_Callback(hObject, eventdata, handles)
+% hObject    handle to PreparationDegreeSintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PreparationDegreeSintering as text
+%        str2double(get(hObject,'String')) returns contents of PreparationDegreeSintering as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function PreparationDegreeSintering_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PreparationDegreeSintering (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function PreparationDegreeTotal_Callback(hObject, eventdata, handles)
+% hObject    handle to PreparationDegreeTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PreparationDegreeTotal as text
+%        str2double(get(hObject,'String')) returns contents of PreparationDegreeTotal as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function PreparationDegreeTotal_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PreparationDegreeTotal (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in LifeCycleAssessmentButton.
+function LifeCycleAssessmentButton_Callback(hObject, eventdata, handles)
+% hObject    handle to LifeCycleAssessmentButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
