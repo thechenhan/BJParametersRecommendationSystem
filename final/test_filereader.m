@@ -22,7 +22,7 @@ function varargout = test_filereader(varargin)
 
 % Edit the above text to modify the response to help test_filereader
 
-% Last Modified by GUIDE v2.5 24-Feb-2015 17:51:02
+% Last Modified by GUIDE v2.5 25-Feb-2015 16:17:47
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -299,243 +299,6 @@ guidata(hObject, handles);
 % --- Executes during object creation, after setting all properties.
 function Drying_Time_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to Drying_Time (see GCBO)
-% eventdata  reserved - to be defined in drying future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have drying white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in pushbutton2.
-function pushbutton2_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton2 (see GCBO)
-% eventdata  reserved - to be defined in drying future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% ProcessVariables.Layer_Thickness = str2double(get(handles.Layer_Thickness,'String'));
-% ProcessVariables.Drying_Time = str2double(get(handles.Drying_Time,'String'));
-% ProcessVariables.Drying_Power = str2double(get(handles.Drying_Power,'String'));
-% ProcessVariables.Spreading_Speed = str2double(get(handles.Spreading_Speed,'String'));
-% ProcessVariables.Printing_Saturation = str2double(get(handles.Printing_Saturation,'String'));
-% ProcessVariables.Powder_Recycle_Ratio = str2double(get(handles.Powder_Recycle_Ratio,'String'));
-% ProcessVariables.Rapid_Traversing_Speed = str2double(get(handles.Rapid_Traversing_Speed,'String'));
-% assignin('base','ProcessVariables',ProcessVariables);
-Layer_Thickness=str2double(get(handles.Layer_Thickness,'String'));
-Spreading_Speed=str2double(get(handles.Spreading_Speed,'String'));
-Drying_Time=str2double(get(handles.Drying_Time,'String'));
-Clean_Frequency=str2double(get(handles.Clean_Frequency,'String'));
-Powder_Recycle_Ratio=str2double(get(handles.Powder_Recycle_Ratio,'String'))/100;
-Printing_Saturation=str2double(get(handles.Printing_Saturation,'String'))/100;
-Rapid_Traversing_Speed=str2double(get(handles.Rapid_Traversing_Speed,'String'));
-
-intersectlayer=evalin('base','intersectlayer');
-layerNum=size(intersectlayer,2);
-
-OperationPower=evalin('base','Power');
-
-for i=1:layerNum
-    [la(i),xlimit{i},ylimit{i}]=slicebar(intersectlayer{i});
-end
-
-Time=0;
-Power=0;
-TT=0;
-% EOP=0;
-% EOS=0;
-% EOD=0;
-TE=0;
-ST=0;
-DT=0;
-SD=0;
-PT=0;
-
-for i=1:layerNum
-    SD=xlimit{i}(2)-xlimit{i}(1);
-    SD=SD+10;
-%     if i>=1 && i<10 
-%         ST=2+(SD)/1+(120-SD)/25; 
-%     end
-%     if i>=11 && i<15 
-%         ST=2+(SD)/3+(120-SD)/25; 
-%     end
-%     if i>=15 && i<20 
-%         ST=2+(SD)/5+(120-SD)/25; 
-%     end
-%     if i>=20 && i<25 
-%         ST=2+(SD)/10+(120-SD)/25;
-%     end
-%     if i>=25 && i<35 
-%         ST=2+(SD)/15+(120-SD)/25; 
-%     end
-%     if i>=35
-%         ST=2+(SD)/20+(120-SD)/25;  
-%     end
-    ST=2+(SD)/Spreading_Speed+(120-SD)/Rapid_Traversing_Speed;
-    [Time,Power,TT]=addData(Time,Power,OperationPower.Spreading,ST,TT);
-    TE=TE+OperationPower.Spreading*ST;
-    
-    PT=0.09*ylimit{i}(2)+26.4670+2.5;
-    [Time,Power,TT]=addData(Time,Power,OperationPower.Printing,PT,TT);
-    TE=TE+OperationPower.Printing*PT;
-    
-    
-%     if i>=1 && i<10 
-%         DT=50; 
-%     end
-%     if i>=10 && i<20 
-%         DT=40; 
-%     end
-%     if i>=20 
-%         DT=40; 
-%     end
-    [Time,Power,TT]=addData(Time,Power,OperationPower.Drying,Drying_Time,TT);
-    TE=TE+OperationPower.Printing*Drying_Time;
-
-end
-SimResult.Time=Time;
-SimResult.Power=Power;
-SimResult.TT=TT;
-SimResult.TE=TE;
-Volume=sum(la)*Layer_Thickness/1000;
-Weight=Volume*4.0714;
-SimResult.Powder=342-(342-Weight)*Powder_Recycle_Ratio;
-SimResult.Cleaner=layerNum*Clean_Frequency*6.24;
-SimResult.Binder=layerNum*Clean_Frequency*7.158+Volume*0.4730*Printing_Saturation;
-
-
-assignin('base','SimResult',SimResult);
-run('Simulation_Result.m');  
-handles=guihandles;
-% axes(handles.Time_Power_Curve);
-% plotwithprocess(SimResult.Time,SimResult.Power);
-set(handles.Total_Energy,'String','a');
-
-% % Layer_Thickness = str2double(get(handles.Layer_Thickness,'String'));
-% % assignin('base','Layer_Thickness',Layer_Thickness);
-% % Drying_Time = str2double(get(handles.Drying_Time,'String'));
-% % assignin('base','Drying_Time',Drying_Time);
-% % Drying_Power = str2double(get(handles.Drying_Power,'String'));
-% % assignin('base','Drying_Power',Drying_Power);
-% % Spreading_Speed = str2double(get(handles.Spreading_Speed,'String'));
-% % assignin('base','Spreading_Speed',Spreading_Speed);
-% % Printing_Saturation = str2double(get(handles.Printing_Saturation,'String'));
-% % assignin('base','Printing_Saturation',Printing_Saturation);
-% % Powder_Recycle_Ratio = str2double(get(handles.Powder_Recycle_Ratio,'String'));
-% % assignin('base','Powder_Recycle_Ratio',Powder_Recycle_Ratio);
-
-
-
-function Rapid_Traversing_Speed_Callback(hObject, eventdata, handles)
-% hObject    handle to Rapid_Traversing_Speed (see GCBO)
-% eventdata  reserved - to be defined in drying future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of Rapid_Traversing_Speed as text
-%        str2double(get(hObject,'String')) returns contents of Rapid_Traversing_Speed as drying double
-
-
-% --- Executes during object creation, after setting all properties.
-function Rapid_Traversing_Speed_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to Rapid_Traversing_Speed (see GCBO)
-% eventdata  reserved - to be defined in drying future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have drying white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on selection change in Layer_List.
-function Layer_List_Callback(hObject, eventdata, handles)
-% hObject    handle to Layer_List (see GCBO)
-% eventdata  reserved - to be defined in drying future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-layer=get(hObject,'Value');
-intersectlayer=evalin('base','intersectlayer');
-xLimits=evalin('base','xLimits');
-a=xLimits(1,2)-xLimits(1,1);
-xLimits(1,1)=xLimits(1,1)-a*0.1;
-xLimits(1,2)=xLimits(1,2)+a*0.1;
-yLimits=evalin('base','yLimits');
-a=yLimits(1,2)-yLimits(1,1);
-yLimits(1,1)=yLimits(1,1)-a*0.1;
-yLimits(1,2)=yLimits(1,2)+a*0.1;
-currIntersect=intersectlayer{layer};
-axes(handles.Layer_View);
-cla(handles.Layer_View);
-    hold all
-    axis equal
-    xlim(xLimits)
-    ylim(yLimits)
-    for idxObj = 1: numel(currIntersect)
-        switch size(currIntersect{idxObj}, 1)
-            case 1
-                plot(currIntersect{idxObj}(:,1), currIntersect{idxObj}(:,2), '+');
-            case 2
-                plot(currIntersect{idxObj}(:,1), currIntersect{idxObj}(:,2), '-');
-            case 3
-                fill(currIntersect{idxObj}(:,1), currIntersect{idxObj}(:,2), rand(1,3));
-        end
-    end
-    drawnow
-
-% Hints: contents = cellstr(get(hObject,'String')) returns Layer_List contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from Layer_List
-
-
-% --- Executes during object creation, after setting all properties.
-function Layer_List_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to Layer_List (see GCBO)
-% eventdata  reserved - to be defined in drying future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: listbox controls usually have drying white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in pushbutton3.
-function pushbutton3_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton3 (see GCBO)
-% eventdata  reserved - to be defined in drying future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% slice the STL file
-LT=get(handles.Layer_Thickness,'String');
-LT=str2double(LT)/1000;
-intersectlayer=slicelayer(get(handles.file_path,'String'),LT);
-
-% Delete Void Cells of the layer information
-intersectlayer=deletevoidcell(intersectlayer);
-assignin('base','intersectlayer',intersectlayer);
-
-% Fill the Layer_List
-% intersectlayer=evalin('base','intersectlayer');
-length=size(intersectlayer,2);
-for i=1:length
-    layerlist{i,1}=i;
-end
-set(handles.Layer_List,'String',layerlist);
-
-
-
-function File_Path_Power_Callback(hObject, eventdata, handles)
-% hObject    handle to File_Path_Power (see GCBO)
-% eventdata  reserved - to be defined in drying future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of File_Path_Power as text
-%        str2double(get(hObject,'String')) returns contents of File_Path_Power as drying double
-
-
-% --- Executes during object creation, after setting all properties.
-function File_Path_Power_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to File_Path_Power (see GCBO)
 % eventdata  reserved - to be defined in drying future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -1067,6 +830,8 @@ end
 if minTimePosition == 0
     errordlg('No Solution, Please Modify Your Quality Requirement','Error!');
 else
+    newSpreadSpeedProfileTable = get(handles.SpreadSpeedTable, 'data');
+    newSpreadSpeedProfileTable(:,2,:) = parameterDatabase(4, minTimePosition); %set the drying time to the optimal value
     set(handles.Layer_Thickness, 'string',  parameterDatabase(1, minTimePosition));
     set(handles.Printing_Saturation, 'string',  parameterDatabase(2, minTimePosition));
     set(handles.Heater_Power_Ratio, 'string',  parameterDatabase(3, minTimePosition));
@@ -1075,6 +840,8 @@ else
     set(handles.Shrinkage_Y, 'string',  PredictValueShrinkageY(1, minTimePosition)*100);
     set(handles.Shrinkage_Z, 'string',  PredictShrinkageZValue(1, minTimePosition)*100);
     set(handles.Optimal_Printing_Time, 'string', minTimeValue);
+    set(handles.InitialDryingTimeEditor, 'string', parameterDatabase(4, minTimePosition)); % set the initial drying time to the optimal value
+    set(handles.SpreadSpeedTable, 'data', newSpreadSpeedProfileTable);
 end
 
 
@@ -1382,8 +1149,6 @@ function CalculateTimeButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 load('parameterDatabase.mat');
-
-
 initialDryingTime=str2double(get(handles.InitialDryingTimeEditor, 'string'));
 initialSpreadSpeed=str2double(get(handles.InitialSpreadSpeedEditor, 'string'));
 DryingSpreadingProfile=get(handles.SpreadSpeedTable, 'data');
@@ -1396,14 +1161,48 @@ if (isempty(get(handles.Layer_Thickness, 'string')))
 else 
 layerThickness=str2double(get(handles.Layer_Thickness,'string'));
 end
+if (isempty(get(handles.Printing_Saturation, 'string')))
+    errordlg('Please set up the Printing Saturation (input yourself or using the recommandation ','Invalid Input','modal');
+else 
+printingSaturation=str2double(get(handles.Printing_Saturation,'string'));
+end
 
 fileName = get(handles.file_path,'String');
 [vertices, tessellation] = readStl(fileName);
 [triBottomList, triTopList] = buildTopBotLists(vertices, tessellation);
 zLimits = [min(vertices(:,3)) max(vertices(:,3))];
 heightZ = (zLimits(2) - zLimits(1)) * 1000;
-LayerNum = heightZ/layerThickness;
+LayerNum = ceil(heightZ/layerThickness); % round the layerthickness to the larger integer
 
+%calculate the part volume from STL file
+intersectlayer=slicelayer(fileName,(layerThickness/1000));
+intersectlayer=deletevoidcell(intersectlayer);
+
+for i=1:(LayerNum-1)
+    [layerArea(i),xlimit{i},ylimit{i}] = slicebar(intersectlayer{i});
+end
+packRate = 0.52;
+layerPerCleaning = 13; 
+binderPerCleaning = 24; % an estimation value
+cleanerPerCleaning = 73;
+binderNeededInitialization = 48;
+cleanerNeededInitialization = 103; 
+partVolume = (sum(layerArea) + layerArea(1)) * (layerThickness/1000); %the first layer area is the same as the second layer area, previous calculation ignore the first layer
+%calculate the powder consumption and binder consumption
+powderNeededPrinting = partVolume * 4.0741; % equivalent density of the 52% dense steel powder
+partWeight = powderNeededPrinting;
+powderNeededActual = powderNeededPrinting * 1.14; % it is assumed that 14% of the powder are wasted
+binderNeededPrinting = printingSaturation/100 * partVolume * packRate;
+binderNeededCleaning = fix(LayerNum / layerPerCleaning) * binderPerCleaning;
+cleanerNeededCleaning = fix(LayerNum / layerPerCleaning) * cleanerPerCleaning;
+totalBinderConsumption = binderNeededPrinting + binderNeededCleaning + binderNeededInitialization;
+totalCleanerConsumption = cleanerNeededCleaning + cleanerNeededInitialization;
+binderEfficiency = (binderNeededPrinting / totalBinderConsumption) * 100;
+liquidWaste = totalCleanerConsumption + binderNeededCleaning + binderNeededInitialization;
+solidWaste = powderNeededPrinting * 0.14;
+wasteRatio = liquidWaste / partWeight;
+binderRatio = totalBinderConsumption / partWeight;
+cleanerRatio = totalCleanerConsumption / partWeight;
 % curing time estimation
 roomTemperature = 25;
 % the curing oven temperature rising rate is 5 degree/mins and cooling rate
@@ -1411,8 +1210,6 @@ roomTemperature = 25;
 curingTempRisingTime = (curingTemperature - roomTemperature)*60/5; % tranform the time into seconds.
 curingTempLoweringTime = (curingTemperature - roomTemperature)*60/1.2; 
 curingTimeEstimation = curingTempRisingTime + curingHoldTime + curingTempLoweringTime;
-set(handles.CuringTimeEstimation, 'string', curingTimeEstimation);
-set(handles.CuringTimeEstimation, 'value', curingTimeEstimation);
 
 %sintering time estimation refer to the sintering profil manual for detail
 %data
@@ -1423,8 +1220,6 @@ elseif (sinteringProfile == 2) %Bronze Infiltration
 elseif (sinteringProfile == 3) %S4 Sintering
     sinteringTimeEstimation = 394 * 60;
 end
-set(handles.SinteringTimeEstimation, 'string', sinteringTimeEstimation);
-set(handles.SinteringTimeEstimation, 'value', sinteringTimeEstimation);
 
 %printing Time estimation
 %initialization Time
@@ -1470,14 +1265,10 @@ end
 
 % time of auto cleaning
 
-layerPerCleaning = 13; 
+
 autocleaningTime = 360; % refer to user manual of the printer
 autocleaningTotalTime = (fix(LayerNum/layerPerCleaning)- 1) * autocleaningTime;
-
 totalPrintingTimeEstimation = initializationTime + timePrintheadPass + timePlatformMoving + heatingTime + spreadTime + autocleaningTotalTime;
-
-set(handles.PrintingTimeEstimation, 'string', totalPrintingTimeEstimation);
-set(handles.PrintingTimeEstimation, 'value', totalPrintingTimeEstimation);
 
 % manual working time from the experiments
 printingPreparationTime = 20 * 60;
@@ -1485,6 +1276,9 @@ curingPreparationTime = 5 * 60;
 depowderTime = 10 * 60;
 sinteringPreparationTime = 5* 60;
 manualWorkTime = depowderTime + sinteringPreparationTime + curingPreparationTime + printingPreparationTime;
+
+%material consumption
+
 
 %KPI related Time parameter
 %%busy Time
@@ -1495,7 +1289,7 @@ totalBusyTime = totalPrinterBusyTime + totalCuringOvenBusyTime + totalSinteringF
 %%Operation Time
 sinteringOperationTime = sinteringTimeEstimation;
 curingOperationTime = curingTimeEstimation;
-printingOperationTime = timePrintheadPass + heatingTime + spreadTime + timePlatformMoving;
+printingOperationTime = timePrintheadPass + heatingTime + spreadTime + timePlatformMoving; % no autocleaning is counted
 mainUsageTime = sinteringOperationTime + curingOperationTime + printingOperationTime; 
 %%Availability
 availabilityPrint = (1 - totalPrinterBusyTime / totalBusyTime) * 100; 
@@ -1515,9 +1309,17 @@ preparationDegreeSintering = (sinteringPreparationTime / totalSinteringFurnaceBu
 preparationDegreeTotal = ((printingPreparationTime + curingPreparationTime + sinteringPreparationTime) / totalBusyTime) * 100;
 
 % display the result on the interface
-set(handles.ManualWorkTimeEstimation, 'string', manualWorkTime);
 totalTime = totalBusyTime;
 totalTimeHours = totalTime / 3600 ; 
+set(handles.PartVolume, 'string', partVolume);
+set(handles.PartVolume, 'value', partVolume);
+set(handles.CuringTimeEstimation, 'string', curingTimeEstimation);
+set(handles.CuringTimeEstimation, 'value', curingTimeEstimation);
+set(handles.SinteringTimeEstimation, 'string', sinteringTimeEstimation);
+set(handles.SinteringTimeEstimation, 'value', sinteringTimeEstimation);
+set(handles.PrintingTimeEstimation, 'string', totalPrintingTimeEstimation);
+set(handles.PrintingTimeEstimation, 'value', totalPrintingTimeEstimation);
+set(handles.ManualWorkTimeEstimation, 'string', manualWorkTime);
 set(handles.TotalTimeEstimationSeconds, 'string', totalTime);
 set(handles.TotalTimeEstimationSeconds, 'value', totalTime);
 set(handles.TotalTimeEstimationHours, 'string', totalTimeHours);
@@ -1562,7 +1364,22 @@ set(handles.PreparationDegreeCuring, 'string', preparationDegreeCuring);
 set(handles.PreparationDegreeCuring, 'value', preparationDegreeCuring);
 set(handles.PreparationDegreeSintering, 'string', preparationDegreeSintering);
 set(handles.PreparationDegreeSintering, 'value', preparationDegreeSintering);
-
+set(handles.GreenPowderConsumptionEstimation, 'string', powderNeededActual); 
+set(handles.GreenPowderConsumptionEstimation, 'value', powderNeededActual); 
+set(handles.BinderConsumptionEstimation, 'string',totalBinderConsumption);
+set(handles.BinderConsumptionEstimation, 'value',totalBinderConsumption);
+set(handles.CleanerConsumptionEstimation, 'string',totalCleanerConsumption);
+set(handles.CleanerConsumptionEstimation, 'value',totalCleanerConsumption);
+set(handles.WasteGenerationEstimation, 'string',liquidWaste);
+set(handles.WasteGenerationEstimation, 'value',liquidWaste);
+set(handles.BinderEfficiencyEstimation, 'string', binderEfficiency);
+set(handles.BinderEfficiencyEstimation, 'value', binderEfficiency);
+set(handles.WasteRatioEstimation, 'string', wasteRatio);
+set(handles.WasteRatioEstimation, 'value', wasteRatio);
+set(handles.BinderRatioEstimation, 'string', binderRatio);
+set(handles.BinderRatioEstimation, 'value', binderRatio);
+set(handles.CleanerRatioEstimation, 'string', cleanerRatio);
+set(handles.CleanerRatioEstimation, 'value', cleanerRatio);
 
 
 
@@ -1576,11 +1393,12 @@ function ResetProfileButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 load('defaultSpreadDryingProfil.mat');
 defaultSpreadDryingProfil=defaultprofile; %% load the initial Spread Drying profil
+set(handles.PartVolume, 'string','');
+set(handles.PartVolume, 'value', 0);
 set(handles.CuringTemperatureEditor, 'value', 175);
 set(handles.CuringHoldTimeEditor, 'value', 5);
 set(handles.CuringTemperatureEditor, 'string', 175);
 set(handles.CuringHoldTimeEditor, 'string', 5);
-%set(handles.SinteringProfileSelection, 'string','S4-One Step');
 set(handles.SinteringProfileSelection, 'value',1);
 set(handles.InitialDryingTimeEditor, 'value',30);
 set(handles.InitialDryingTimeEditor, 'string',30);
@@ -1639,6 +1457,22 @@ set(handles.PreparationDegreeCuring, 'string', '');
 set(handles.PreparationDegreeCuring, 'value', 0);
 set(handles.PreparationDegreeSintering, 'string', '');
 set(handles.PreparationDegreeSintering, 'value', 0);
+set(handles.GreenPowderConsumptionEstimation, 'string', ''); 
+set(handles.GreenPowderConsumptionEstimation, 'value', 0); 
+set(handles.BinderConsumptionEstimation, 'string','');
+set(handles.BinderConsumptionEstimation, 'value',0);
+set(handles.CleanerConsumptionEstimation, 'string','');
+set(handles.CleanerConsumptionEstimation, 'value',0);
+set(handles.WasteGenerationEstimation, 'string','');
+set(handles.WasteGenerationEstimation, 'value',0);
+set(handles.BinderEfficiencyEstimation, 'string', '');
+set(handles.BinderEfficiencyEstimation, 'value', 0);
+set(handles.WasteRatioEstimation, 'string', '');
+set(handles.WasteRatioEstimation, 'value', 0);
+set(handles.BinderRatioEstimation, 'string', '');
+set(handles.BinderRatioEstimation, 'value', 0);
+set(handles.CleanerRatioEstimation, 'string', '');
+set(handles.CleanerRatioEstimation, 'value', 0);
 
 
 function PrintingTimeEstimation_Callback(hObject, eventdata, handles)
@@ -1873,18 +1707,18 @@ end
 
 
 
-function edit41_Callback(hObject, eventdata, handles)
-% hObject    handle to edit41 (see GCBO)
+function GreenPowderConsumptionEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to GreenPowderConsumptionEstimation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit41 as text
-%        str2double(get(hObject,'String')) returns contents of edit41 as a double
+% Hints: get(hObject,'String') returns contents of GreenPowderConsumptionEstimation as text
+%        str2double(get(hObject,'String')) returns contents of GreenPowderConsumptionEstimation as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit41_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit41 (see GCBO)
+function GreenPowderConsumptionEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to GreenPowderConsumptionEstimation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -2011,18 +1845,18 @@ end
 
 
 
-function MaterialEfficiencyEstimation_Callback(hObject, eventdata, handles)
-% hObject    handle to MaterialEfficiencyEstimation (see GCBO)
+function BinderEfficiencyEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to BinderEfficiencyEstimation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of MaterialEfficiencyEstimation as text
-%        str2double(get(hObject,'String')) returns contents of MaterialEfficiencyEstimation as a double
+% Hints: get(hObject,'String') returns contents of BinderEfficiencyEstimation as text
+%        str2double(get(hObject,'String')) returns contents of BinderEfficiencyEstimation as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function MaterialEfficiencyEstimation_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to MaterialEfficiencyEstimation (see GCBO)
+function BinderEfficiencyEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BinderEfficiencyEstimation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -2034,18 +1868,18 @@ end
 
 
 
-function wasteGenerationEstimation_Callback(hObject, eventdata, handles)
-% hObject    handle to wasteGenerationEstimation (see GCBO)
+function WasteGenerationEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to WasteGenerationEstimation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of wasteGenerationEstimation as text
-%        str2double(get(hObject,'String')) returns contents of wasteGenerationEstimation as a double
+% Hints: get(hObject,'String') returns contents of WasteGenerationEstimation as text
+%        str2double(get(hObject,'String')) returns contents of WasteGenerationEstimation as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function wasteGenerationEstimation_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to wasteGenerationEstimation (see GCBO)
+function WasteGenerationEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to WasteGenerationEstimation (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -2406,3 +2240,95 @@ function LifeCycleAssessmentButton_Callback(hObject, eventdata, handles)
 % hObject    handle to LifeCycleAssessmentButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function PartVolume_Callback(hObject, eventdata, handles)
+% hObject    handle to PartVolume (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of PartVolume as text
+%        str2double(get(hObject,'String')) returns contents of PartVolume as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function PartVolume_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to PartVolume (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function WasteRatioEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to WasteRatioEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of WasteRatioEstimation as text
+%        str2double(get(hObject,'String')) returns contents of WasteRatioEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function WasteRatioEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to WasteRatioEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function BinderRatioEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to BinderRatioEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of BinderRatioEstimation as text
+%        str2double(get(hObject,'String')) returns contents of BinderRatioEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function BinderRatioEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to BinderRatioEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function CleanerRatioEstimation_Callback(hObject, eventdata, handles)
+% hObject    handle to CleanerRatioEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of CleanerRatioEstimation as text
+%        str2double(get(hObject,'String')) returns contents of CleanerRatioEstimation as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function CleanerRatioEstimation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to CleanerRatioEstimation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
