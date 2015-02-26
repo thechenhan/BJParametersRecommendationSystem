@@ -8,4 +8,4 @@ Do you know 3D printer？ Have you ever used it? You may know that there are a l
 Load the STL file, adjust the wanted part quality according to the needs, click recommendation button. The recommendation parameters and estimated quality performance will be shown. With this premiere parameters, set up the production system parameters,  either using the default value retrieved from the recommendation or customized value. The calculation will give the estimation of time and material consumption as well as the production performance(KPIs). 
 
 
-![](https://raw.githubusercontent.com/thechenhan/BJParametersRecommendationSystem/master/Software_picuture.jpg)
+![](https://github.com/thechenhan/BJParametersRecommendationSystem/blob/BJModelTimeConsumption/Software_picture.JPG)
